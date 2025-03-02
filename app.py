@@ -8,6 +8,7 @@ import os
 import sqlite3
 import bcrypt
 from datetime import datetime, date
+from dotenv import load_dotenv
 
 
 
@@ -17,7 +18,20 @@ os.environ.get('SECRET_KEY', 'admin')
 DATABASE_PATH = 'attendance.db'
 TRAINING_IMAGES_PATH = 'Training_images'
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
+# Add this after app initialization
+for directory in [TRAINING_IMAGES_PATH]:
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+
+
+load_dotenv()  # Load environment variables from .env file
+DATABASE_PATH = os.environ.get('DATABASE_PATH', 'attendance.db')
+TRAINING_IMAGES_PATH = os.environ.get('TRAINING_IMAGES_PATH', 'Training_images')
 
 
 
@@ -569,6 +583,10 @@ def mark_attendance():
 
         cap.release()
         cv2.destroyAllWindows()
+    # In mark_attendance route
+    is_production = os.environ.get('ENVIRONMENT') == 'production'
+    if is_production:
+       return "Face recognition is disabled in production environment"
 
     conn.close()
     return render_template('mark_attendance.html', courses=courses)
@@ -744,8 +762,13 @@ def logout():
     session.clear()
     return redirect(url_for('login'))
 
+# Add this at the end of your file
 if __name__ == '__main__':
     init_db()
-    initialize_face_recognition()  # Add this line
+    initialize_face_recognition()
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
+else:
+    # This block runs when imported by a WSGI server
+    init_db()
+    initialize_face_recognition()

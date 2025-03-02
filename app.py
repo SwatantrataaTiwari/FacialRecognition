@@ -9,10 +9,19 @@ import sqlite3
 import bcrypt
 from datetime import datetime, date
 
+
+
 app = Flask(__name__)
 app.secret_key = 'admin'
 DATABASE_PATH = 'attendance.db'
 TRAINING_IMAGES_PATH = 'Training_images'
+
+port = int(os.environ.get("PORT", 5000))  # Use Render's assigned port
+app.run(host="0.0.0.0", port=port)
+
+@app.route("/")
+def home():
+    return "Hello, Render!"
 
 # Initialize database
 def init_db():

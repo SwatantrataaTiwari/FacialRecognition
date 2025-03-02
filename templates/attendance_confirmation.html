@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Confirmation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .confirmation-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 30px 40px;
+            max-width: 400px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .confirmation-container h2 {
+            color: #2e7d32;
+            margin-bottom: 20px;
+        }
+        .confirmation-container p {
+            color: #555555;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .confirmation-container p strong {
+            color: #000000;
+        }
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-container">
+        <h2>Attendance Marked Successfully!</h2>
+        <p>Username: <strong>{{ username }}</strong></p>
+        <p>Time: <strong>{{ time }}</strong></p>
+        <p>Date: <strong>{{ date }}</strong></p>
+        <div class="button-container">
+            <a href="{{ url_for('dashboard') }}" class="button">View Attendance</a>
+            <a href="{{ url_for('mark_attendance') }}" class="button">Mark Attendance</a>
+        </div>
+    </div>
+</body>
+</html>

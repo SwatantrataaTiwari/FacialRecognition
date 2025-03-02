@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard - Attendance System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-white border-r">
+            <div class="p-6">
+                <h1 class="text-xl font-bold text-indigo-700">Attendance System</h1>
+            </div>
+            <nav class="space-y-1">
+                <a href="{{ url_for('dashboard') }}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-indigo-50 hover:text-indigo-700">
+                    <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <path d="M3 9h18" />
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="{{ url_for('mark_attendance') }}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-indigo-50 hover:text-indigo-700">
+                    <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M9 12l2 2 4-4" />
+                        <circle cx="12" cy="12" r="10" />
+                    </svg>
+                    Mark Attendance
+                </a>
+                <a href="{{ url_for('view_records') }}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-indigo-50 hover:text-indigo-700">
+                    <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <path d="M14 2v6h6" />
+                        <path d="M16 13H8" />
+                        <path d="M16 17H8" />
+                        <path d="M10 9H8" />
+                    </svg>
+                    View Records
+                </a>
+                <a href="{{ url_for('logout') }}" class="flex items-center px-6 py-3 text-gray-600 hover:bg-indigo-50 hover:text-indigo-700 mt-auto">
+                    <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+                    Logout
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-8">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-2xl font-bold text-indigo-900">Welcome, {{ session.get('username', 'st') }}</h1>
+                <button class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                    Quick Mark Attendance
+                </button>
+            </div>
+
+            <!-- Courses Section -->
+            <div class="bg-white rounded-lg p-6 mb-8">
+                <h2 class="text-xl font-bold text-indigo-900 mb-6">Courses</h2>
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="p-6 bg-indigo-50 rounded-lg text-center">
+                        <h3 class="text-lg font-semibold text-indigo-900 mb-2">BCA</h3>
+                        <p class="text-indigo-600 mb-2">{{ course_counts.bca|default(0) }} Students</p>
+                        <a href="{{ url_for('view_course_records', course_id=1) }}" class="text-indigo-600 hover:text-indigo-800">View Details</a>
+                    </div>
+                    <div class="p-6 bg-indigo-50 rounded-lg text-center">
+                        <h3 class="text-lg font-semibold text-indigo-900 mb-2">BSc</h3>
+                        <p class="text-indigo-600 mb-2">{{ course_counts.bsc|default(0) }} Students</p>
+                        <a href="{{ url_for('view_course_records', course_id=2) }}" class="text-indigo-600 hover:text-indigo-800">View Details</a>
+                    </div>
+                    <div class="p-6 bg-indigo-50 rounded-lg text-center">
+                        <h3 class="text-lg font-semibold text-indigo-900 mb-2">BBA</h3>
+                        <p class="text-indigo-600 mb-2">{{ course_counts.bba|default(0) }} Students</p>
+                        <a href="{{ url_for('view_course_records', course_id=3) }}" class="text-indigo-600 hover:text-indigo-800">View Details</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg">
+                    <h2 class="text-gray-600 text-sm font-medium mb-2">Total Classes</h2>
+                    <p class="text-3xl font-bold text-indigo-900 mb-1">24</p>
+                    <p class="text-green-500 text-sm">+2 this week</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg">
+                    <h2 class="text-gray-600 text-sm font-medium mb-2">Attendance Rate</h2>
+                    <p class="text-3xl font-bold text-indigo-900 mb-1">85%</p>
+                    <p class="text-green-500 text-sm">+5% from last month</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg">
+                    <h2 class="text-gray-600 text-sm font-medium mb-2">Current Streak</h2>
+                    <p class="text-3xl font-bold text-indigo-900 mb-1">5 days</p>
+                    <p class="text-green-500 text-sm">Keep it up!</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg">
+                    <h2 class="text-gray-600 text-sm font-medium mb-2">Classes This Month</h2>
+                    <p class="text-3xl font-bold text-indigo-900 mb-1">15</p>
+                    <p class="text-green-500 text-sm">5 remaining</p>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="bg-white rounded-lg p-6">
+                <h2 class="text-xl font-bold text-indigo-900 mb-6">Recent Activity</h2>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-medium text-gray-900">2025-02-16</p>
+                            <p class="text-sm text-gray-500">18:15:07</p>
+                        </div>
+                        <span class="px-3 py-1 text-sm text-green-600 bg-green-100 rounded-full">Present</span>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 border-t">
+                        <div>
+                            <p class="font-medium text-gray-900">2025-02-13</p>
+                            <p class="text-sm text-gray-500">09:30:22</p>
+                        </div>
+                        <span class="px-3 py-1 text-sm text-orange-600 bg-orange-100 rounded-full">Late</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Statistics -->
+            <div class="bg-white rounded-lg p-6 mt-8">
+                <h2 class="text-xl font-bold text-indigo-900 mb-6">Course Statistics</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="text-left bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-gray-600">Course Name</th>
+                                <th class="px-6 py-3 text-gray-600">Total Students</th>
+                                <th class="px-6 py-3 text-gray-600">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-t">
+                                <td class="px-6 py-4">BCA</td>
+                                <td class="px-6 py-4">{{ course_counts.bca|default(0) }}</td>
+                                <td class="px-6 py-4">
+                                    <a href="{{ url_for('view_course_records', course_id=1) }}" class="text-indigo-600 hover:text-indigo-800">View Details</a>
+                                </td>
+                            </tr>
+                            <tr class="border-t">
+                                <td class="px-6 py-4">BSc</td>
+                                <td class="px-6 py-4">{{ course_counts.bsc|default(0) }}</td>
+                                <td class="px-6 py-4">
+                                    <a href="{{ url_for('view_course_records', course_id=2) }}" class="text-indigo-600 hover:text-indigo-800">View Details</a>
+                                </td>
+                            </tr>
+                            <tr class="border-t">
+                                <td class="px-6 py-4">BBA</td>
+                                <td class="px-6 py-4">{{ course_counts.bba|default(0) }}</td>
+                                <td class="px-6 py-4">
+                                    <a href="{{ url_for('view_course_records', course_id=3) }}" class="text-indigo-600 hover:text-indigo-800">View Details</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

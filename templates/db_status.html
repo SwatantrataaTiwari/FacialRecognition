@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Database Status</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        h2 { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Database Status</h1>
+    
+    <h2>Users Table</h2>
+    <table>
+        <tr>
+            <th>user_id</th>
+            <th>username</th>
+            <th>password (hashed)</th>
+            <th>role</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user[0] }}</td>
+            <td>{{ user[1] }}</td>
+            <td>{{ user[2][:20] }}...</td>
+            <td>{{ user[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+    <h2>Attendance Table</h2>
+    <table>
+        <tr>
+            <th>id</th>
+            <th>user_id</th>
+            <th>course_id</th>
+            <th>time</th>
+            <th>date</th>
+        </tr>
+        {% for record in attendance %}
+        <tr>
+            <td>{{ record[0] }}</td>
+            <td>{{ record[1] }}</td>
+            <td>{{ record[2] }}</td>
+            <td>{{ record[3] }}</td>
+            <td>{{ record[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+    <h2>Courses Table</h2>
+    <table>
+        <tr>
+            <th>course_id</th>
+            <th>course_name</th>
+        </tr>
+        {% for course in courses %}
+        <tr>
+            <td>{{ course[0] }}</td>
+            <td>{{ course[1] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+    <p><a href="{{ url_for('teacher_dashboard') }}">Back to Dashboard</a></p>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mark Attendance | Attendance System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h2 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            background-color: white;
+            transition: all 0.3s ease;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+        }
+
+        .camera-icon {
+            width: 150px;
+            height: 150px;
+            background: #edf2f7;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .camera-icon:hover {
+            transform: scale(1.05);
+        }
+
+        .camera-text {
+            color: #718096;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        button {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #3182ce;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .back-button {
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-button:hover {
+            color: #2d3748;
+        }
+
+        #loadingMessage {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            color: #4a5568;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.75rem;
+            }
+
+            .camera-icon {
+                width: 120px;
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Mark Attendance</h2>
+
+        <form method="POST" id="faceRecForm">
+            <label for="course">Select Course</label>
+            <select name="course_id" id="courseDropdown" required>
+                {% for course in courses %}
+                <option value="{{ course[0] }}">
+                    {% if course[1] == "Introduction to Python" %}
+                        BCA
+                    {% elif course[1] == "Data Structures" %}
+                        BBA
+                    {% elif course[1] == "Database Management" %}
+                        BSc
+                    {% else %}
+                        {{ course[1] }}
+                    {% endif %}
+                </option>
+                {% endfor %}
+            </select>
+
+            <div class="camera-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#4a5568" stroke-width="2">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                </svg>
+            </div>
+            
+            <p class="camera-text">Click the button below to start face recognition</p>
+            
+            <button type="submit" id="startButton">Start Face Recognition</button>
+            <div id="loadingMessage">Detecting face 😊, please wait...</div>
+        </form>
+
+        <a href="{{ url_for('dashboard') }}" class="back-button">Back to Dashboard</a>
+    </div>
+
+    <script>
+        document.getElementById('faceRecForm').addEventListener('submit', function(event) {
+            let courseDropdown = document.getElementById('courseDropdown');
+            if (!courseDropdown.value) {
+                event.preventDefault();
+                alert("Please select a course before starting face recognition.");
+            } else {
+                document.getElementById('loadingMessage').style.display = 'block';
+                document.getElementById('startButton').disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>

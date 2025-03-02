@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Attendance System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .background-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 400px;
+            height: 400px;
+            top: -150px;
+            left: -150px;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 300px;
+            height: 300px;
+            bottom: -100px;
+            right: -100px;
+            animation-delay: 2s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        .container h2 {
+            color: #1a237e;
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            color: #4a5568;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px 16px;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            color: #2d3748;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-group input::placeholder {
+            color: #a0aec0;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        p {
+            color: #4a5568;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.95em;
+        }
+
+        a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    
+    <div class="container">
+        <h2>Create Account</h2>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required placeholder="Enter your username">
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
+            </div>
+            <div class="input-group">
+                <label for="role">Role</label>
+                <select id="role" name="role" required>
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                </select>
+            </div>
+            <div class="input-group" id="courseSelection">
+                <label for="course">Course</label>
+                <select id="course" name="course_id">
+                    <option value="1">BCA</option>
+                    <option value="2">BBA</option>
+                    <option value="3">BSc</option>
+                </select>
+            </div>
+            <div class="input-group" id="imageUpload">
+                <label for="image">Upload Photo</label>
+                <input type="file" id="image" name="image">
+            </div>
+            <button type="submit">Register</button>
+            <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('role').addEventListener('change', function() {
+            const courseSelection = document.getElementById('courseSelection');
+            const imageUpload = document.getElementById('imageUpload');
+            if (this.value === 'teacher') {
+                courseSelection.style.display = 'none';
+                imageUpload.style.display = 'none';
+            } else {
+                courseSelection.style.display = 'block';
+                imageUpload.style.display = 'block';
+            }
+        });
+
+        // Add subtle animation to the shapes
+        document.addEventListener('mousemove', (e) => {
+            const shapes = document.querySelectorAll('.shape');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            shapes.forEach(shape => {
+                const shapeX = (x * 20) - 10;
+                const shapeY = (y * 20) - 10;
+                shape.style.transform = `translate(${shapeX}px, ${shapeY}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

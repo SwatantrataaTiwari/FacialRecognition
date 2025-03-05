@@ -8,29 +8,11 @@ import os
 import sqlite3
 import bcrypt
 from datetime import datetime, date
-import sys
-
-
 
 app = Flask(__name__)
 app.secret_key = 'admin'
-os.environ.get('SECRET_KEY', 'admin')
 DATABASE_PATH = 'attendance.db'
 TRAINING_IMAGES_PATH = 'Training_images'
-
-DATABASE_PATH = os.environ.get('DATABASE_PATH', 'attendance.db')
-TRAINING_IMAGES_PATH = os.environ.get('TRAINING_IMAGES_PATH', 'Training_images')
-
-# Create directories if they don't exist
-for directory in [TRAINING_IMAGES_PATH]:
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-
-# Disable webcam in production
-def is_production():
-    return os.environ.get('ENVIRONMENT') == 'production'
-
-
 
 # Initialize database
 def init_db():
@@ -520,10 +502,6 @@ def mark_attendance():
     if 'username' not in session:
         return redirect(url_for('login'))
     
-    # Skip webcam in production
-    if is_production():
-        return render_template('production_no_webcam.html')
-    
     conn = sqlite3.connect(DATABASE_PATH)
     c = conn.cursor()
 
@@ -762,5 +740,4 @@ def logout():
 if __name__ == '__main__':
     init_db()
     initialize_face_recognition()  # Add this line
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(debug=True)
